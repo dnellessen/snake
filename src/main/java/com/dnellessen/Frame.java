@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 public class Frame {
     private static final String TITLE = "Snake";
     private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
+    private static final int HEIGHT = 608;
 
     private static JFrame frame;
     

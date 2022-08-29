@@ -47,19 +47,34 @@ public class Panel extends JPanel implements ActionListener {
     private void start() {
         isRunning = true;
         setStartingPos();
+        setStartingDir();
 
         timer = new Timer(DELAY, this);
         timer.start();
     }
 
     private void setStartingPos() {
-        int startX = random.nextInt(WIDTH);
-        int startY = random.nextInt(HEIGHT);
+        int squaresWidth = WIDTH / SQUARE_SIZE;
+        int squaresHeight= HEIGHT / SQUARE_SIZE;
+
+        int minWidth = squaresWidth / 4;
+        int maxWidth = squaresWidth - minWidth - 1;
+        int minHeight = squaresHeight / 4;
+        int maxHeight = squaresHeight - minHeight - 1;
+
+        int stepsX = random.nextInt(maxWidth - minWidth) + minWidth;
+        int stepsY = random.nextInt(maxHeight - minHeight) + minHeight;
 
         for (int i = 0; i < snakeLength; i++) {
-            x[i] = startX;
-            y[i] = startY;
+            x[i] = stepsX * SQUARE_SIZE;
+            y[i] = stepsY * SQUARE_SIZE;
         }
+    }
+
+    private void setStartingDir() {
+        int dirIndex = random.nextInt(4);
+        char directions[] = {'n', 'e', 's', 'w'};
+        direction = directions[dirIndex];
     }
 
     private void move() {
