@@ -16,15 +16,13 @@ public class Frame {
     private static void initFrame() {
         frame = new JFrame();
     
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.setLayout(null);
-    
         frame.setTitle(TITLE);
         frame.setSize(WIDTH, HEIGHT);
         frame.setResizable(false);
-
+        
         frame.add(new Panel(WIDTH, HEIGHT));
-    
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }    
 }
