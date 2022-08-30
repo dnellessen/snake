@@ -120,16 +120,16 @@ public class Panel extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP:
-                    direction = 'n';
+                    if (direction != 's') direction = 'n';
                     break;
                 case KeyEvent.VK_RIGHT:
-                    direction = 'e';
+                    if (direction != 'w') direction = 'e';
                     break;
                 case KeyEvent.VK_DOWN:
-                    direction = 's';
+                    if (direction != 'n') direction = 's';
                     break;
                 case KeyEvent.VK_LEFT:
-                    direction = 'w';
+                    if (direction != 'e') direction = 'w';
                     break;
             }
         }
