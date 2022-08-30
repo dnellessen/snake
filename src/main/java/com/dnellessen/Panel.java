@@ -1,7 +1,10 @@
 package com.dnellessen;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import java.util.Random;
 
 import java.awt.Graphics;
 import java.awt.Color;
@@ -9,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Random;
 
 public class Panel extends JPanel implements ActionListener {
     private static int WIDTH;
@@ -22,6 +24,8 @@ public class Panel extends JPanel implements ActionListener {
     private int y[];
 
     int score = 0;
+    JLabel scoreLabel;
+
     int snakeLength = 5;
     char direction = 'e';
     boolean isRunning;
@@ -43,6 +47,10 @@ public class Panel extends JPanel implements ActionListener {
 
         this.setFocusable(true);    // focus on panel to be able to listen to keys
         this.addKeyListener(new SnakeKeyListener());
+
+        scoreLabel = new JLabel();
+        scoreLabel.setText(Integer.toString(score));
+        this.add(scoreLabel);
 
         start();
     }
@@ -150,6 +158,7 @@ public class Panel extends JPanel implements ActionListener {
             DELAY -= 10;
             timer.setDelay(DELAY);
         }
+        scoreLabel.setText(Integer.toString(score));
         addApple();
     }
 
