@@ -22,9 +22,12 @@ public class Panel extends JPanel implements ActionListener {
     private int y[];
 
     int score = 0;
-    int snakeLength = 15;
+    int snakeLength = 5;
     char direction = 'e';
     boolean isRunning;
+
+    int appleX;
+    int appleY;
 
     private Timer timer;
     private Random random;
@@ -48,19 +51,20 @@ public class Panel extends JPanel implements ActionListener {
         isRunning = true;
         setStartingPos();
         setStartingDir();
+        addApple();
 
         timer = new Timer(DELAY, this);
         timer.start();
     }
 
     private void setStartingPos() {
-        int squaresWidth = WIDTH / SQUARE_SIZE;
-        int squaresHeight= HEIGHT / SQUARE_SIZE;
+        int numOfSquaresWidth  = WIDTH / SQUARE_SIZE;
+        int numOfSquaresHeight = HEIGHT / SQUARE_SIZE;
 
-        int minWidth = squaresWidth / 4;
-        int maxWidth = squaresWidth - minWidth - 1;
-        int minHeight = squaresHeight / 4;
-        int maxHeight = squaresHeight - minHeight - 1;
+        int minWidth  = numOfSquaresWidth / 4;
+        int maxWidth  = numOfSquaresWidth - minWidth - 1;
+        int minHeight = numOfSquaresHeight / 4;
+        int maxHeight = numOfSquaresHeight - minHeight - 1;
 
         int stepsX = random.nextInt(maxWidth - minWidth) + minWidth;
         int stepsY = random.nextInt(maxHeight - minHeight) + minHeight;
@@ -99,33 +103,63 @@ public class Panel extends JPanel implements ActionListener {
         }
     }
 
-    protected boolean checkSnakeCollision() {
+    private boolean checkSnakeCollision() {
         // self
         for (int i = 1; i < snakeLength; i++)
             if (x[0] == x[i] && y[0] == y[i])
-                return false;
+                return true;
 
         // left
         if (x[0] < 0) 
-            return false;
+            return true;
 
         // right
         if (x[0] > (WIDTH - SQUARE_SIZE)) 
-            return false;
+            return true;
 
         // top
         if (y[0] < 0) 
-            return false;
+            return true;
 
         // bottom
         if (y[0] > (HEIGHT - SQUARE_SIZE*2)) 
-            return false;
+            return true;
 
-        return true;
+        return false;
+    }
+
+    private boolean snakeAteApple() {
+        if (x[0] == appleX && y[0] == appleY)
+            return true;
+
+        return false;
+    }
+
+    private void addApple() {
+        int numOfSquaresWidth  = (WIDTH  / SQUARE_SIZE) - 1;
+        int numOfSquaresHeight = (HEIGHT / SQUARE_SIZE) - 1;
+
+        appleX = random.nextInt(numOfSquaresWidth) * SQUARE_SIZE;
+        appleY = random.nextInt(numOfSquaresHeight) * SQUARE_SIZE;
+    }
+
+    private void handleEatenApple() {
+        snakeLength++;
+        score += 10;
+        if (DELAY > 30 && score % 4 == 0) {
+            DELAY -= 10;
+            timer.setDelay(DELAY);
+        }
+        addApple();
     }
 
     @Override
     public void paintComponent(Graphics g) {
+        // apple
+        g.setColor(new Color(150, 0, 0));
+        g.fillRoundRect(appleX, appleY, SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE/2, SQUARE_SIZE/2);
+
+        // snake
         g.setColor(Color.black);
         for (int i = 0; i < snakeLength; i++) {
             g.fillRect(x[i], y[i], SQUARE_SIZE, SQUARE_SIZE);
@@ -136,7 +170,9 @@ public class Panel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (isRunning) {
             move();
-            isRunning = checkSnakeCollision();
+            isRunning = !checkSnakeCollision();
+            if (snakeAteApple())
+                handleEatenApple();
         }
         repaint();
     }
