@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class Panel extends JPanel implements ActionListener {
+public class GamePanel extends JPanel implements ActionListener {
     private static int WIDTH;
     private static int HEIGHT;
     private static int DELAY = 150;
@@ -40,7 +40,7 @@ public class Panel extends JPanel implements ActionListener {
     private Timer timer;
     private Random random;
 
-    public Panel(int width, int height) {
+    public GamePanel(int width, int height) {
         WIDTH = width;
         HEIGHT = height;
         init();
