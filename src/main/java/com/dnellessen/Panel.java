@@ -27,11 +27,15 @@ public class Panel extends JPanel implements ActionListener {
     JLabel scoreLabel;
 
     int snakeLength = 5;
-    char direction = 'e';
+    char direction;
     boolean isRunning;
-
+    
     int appleX;
     int appleY;
+
+    Color bgColor = new Color(238, 238, 238);
+    Color snakeColor = Color.black;
+    Color appleColor = new Color(150, 0, 0);
 
     private Timer timer;
     private Random random;
@@ -39,6 +43,11 @@ public class Panel extends JPanel implements ActionListener {
     public Panel(int width, int height) {
         WIDTH = width;
         HEIGHT = height;
+        init();
+        start();
+    }
+
+    private void init() {
         NUM_OF_SQUARES = (WIDTH * HEIGHT) / SQUARE_SIZE;
         x = new int[NUM_OF_SQUARES];
         y = new int[NUM_OF_SQUARES];
@@ -51,8 +60,6 @@ public class Panel extends JPanel implements ActionListener {
         scoreLabel = new JLabel();
         scoreLabel.setText(Integer.toString(score));
         this.add(scoreLabel);
-
-        start();
     }
 
     private void start() {
@@ -87,6 +94,12 @@ public class Panel extends JPanel implements ActionListener {
         int dirIndex = random.nextInt(4);
         char directions[] = {'n', 'e', 's', 'w'};
         direction = directions[dirIndex];
+    }
+
+    private void gameOver() {
+        DELAY = 250;
+        timer.setDelay(DELAY);
+        snakeColor = (snakeColor == Color.black) ? bgColor : Color.black;
     }
 
     private void move() {
@@ -165,11 +178,11 @@ public class Panel extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         // apple
-        g.setColor(new Color(150, 0, 0));
+        g.setColor(appleColor);
         g.fillRoundRect(appleX, appleY, SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE/2, SQUARE_SIZE/2);
 
         // snake
-        g.setColor(Color.black);
+        g.setColor(snakeColor);
         for (int i = 0; i < snakeLength; i++) {
             g.fillRect(x[i], y[i], SQUARE_SIZE, SQUARE_SIZE);
         }
@@ -182,6 +195,8 @@ public class Panel extends JPanel implements ActionListener {
             isRunning = !checkSnakeCollision();
             if (snakeAteApple())
                 handleEatenApple();
+        } else {
+            gameOver();
         }
         repaint();
     }
