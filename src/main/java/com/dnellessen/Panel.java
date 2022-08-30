@@ -22,7 +22,7 @@ public class Panel extends JPanel implements ActionListener {
     private int y[];
 
     int score = 0;
-    int snakeLength = 10;
+    int snakeLength = 15;
     char direction = 'e';
     boolean isRunning;
 
@@ -99,10 +99,35 @@ public class Panel extends JPanel implements ActionListener {
         }
     }
 
+    protected boolean checkSnakeCollision() {
+        // self
+        for (int i = 1; i < snakeLength; i++)
+            if (x[0] == x[i] && y[0] == y[i])
+                return false;
+
+        // left
+        if (x[0] < 0) 
+            return false;
+
+        // right
+        if (x[0] > (WIDTH - SQUARE_SIZE)) 
+            return false;
+
+        // top
+        if (y[0] < 0) 
+            return false;
+
+        // bottom
+        if (y[0] > (HEIGHT - SQUARE_SIZE*2)) 
+            return false;
+
+        return true;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
+        g.setColor(Color.black);
         for (int i = 0; i < snakeLength; i++) {
-            g.setColor(Color.black);
             g.fillRect(x[i], y[i], SQUARE_SIZE, SQUARE_SIZE);
         }
     }
@@ -111,6 +136,7 @@ public class Panel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (isRunning) {
             move();
+            isRunning = checkSnakeCollision();
         }
         repaint();
     }
