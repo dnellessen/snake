@@ -7,7 +7,9 @@ import javax.swing.Timer;
 import java.util.Random;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -177,14 +179,21 @@ public class GamePanel extends JPanel implements ActionListener {
 
     @Override
     public void paintComponent(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+
+        // smooth out shapes
+        RenderingHints renderingHints = new RenderingHints(
+            RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHints(renderingHints);
+
         // apple
-        g.setColor(appleColor);
-        g.fillRoundRect(appleX, appleY, SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE/2, SQUARE_SIZE/2);
+        g2d.setColor(appleColor);
+        g2d.fillRoundRect(appleX, appleY, SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE/2, SQUARE_SIZE/2);
 
         // snake
-        g.setColor(snakeColor);
+        g2d.setColor(snakeColor);
         for (int i = 0; i < snakeLength; i++) {
-            g.fillRect(x[i], y[i], SQUARE_SIZE, SQUARE_SIZE);
+            g2d.fillRect(x[i], y[i], SQUARE_SIZE, SQUARE_SIZE);
         }
     }
 
